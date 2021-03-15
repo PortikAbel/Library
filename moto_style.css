@@ -61,6 +61,20 @@ p.bordered {
     border-bottom-color: darkgoldenrod;
 }
 
+table, th, td {
+    border: 1px solid black;
+}
+
+th {
+    font-weight: bold;
+    background-color: khaki;
+}
+
+td {
+    font-weight: normal;
+    background-color: lavender;
+}
+
 #manufactures {
     display: flex;
     flex-flow: row;
