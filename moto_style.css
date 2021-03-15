@@ -60,3 +60,18 @@ p.bordered {
     border-right-color: darkblue;
     border-bottom-color: darkgoldenrod;
 }
+
+#manufactures {
+    display: flex;
+    flex-flow: row;
+}
+
+#manufactures > ol {
+    background-color: coral;
+}
+
+@media screen and (max-width:400px) {
+    table {
+        visibility: hidden;
+    }
+}
