@@ -1,0 +1,91 @@
+body {
+    background-image: url("bckg.jpg");
+    background-attachment: fixed;
+    background-repeat: repeat;
+}
+
+h1, h2 {
+    color: blue;
+    font-family: 'Courier New', Courier, monospace;
+    text-decoration: underline;
+}
+
+ol.green {
+    color: green;
+}
+
+ol.red {
+    color: red;
+}
+
+.font_style {
+    font-size: 90%;
+    font-weight: 600;
+    font-style: normal;
+    text-align: left;
+    text-decoration: skyblue;
+}
+
+section h2 {
+    color: royalblue;
+    font-size: 1.2em;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+a:link {
+    color: steelblue;
+    font-style: normal;
+}
+
+a:visited {
+    color: blueviolet;
+    font-style: italic;
+}
+
+a:hover {
+    color: steelblue;
+    font-style: italic;
+}
+
+a:active {
+    color: blueviolet;
+    font-style: normal;
+}
+
+p.bordered {
+    border-style: groove;
+    border-width: thick;
+    border-top-color: blueviolet;
+    border-left-color: brown;
+    border-right-color: darkblue;
+    border-bottom-color: darkgoldenrod;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th {
+    font-weight: bold;
+    background-color: khaki;
+}
+
+td {
+    font-weight: normal;
+    background-color: lavender;
+}
+
+#manufactures {
+    display: flex;
+    flex-flow: row;
+}
+
+#manufactures > ol {
+    background-color: coral;
+}
+
+@media screen and (max-width:400px) {
+    table {
+        visibility: hidden;
+    }
+}
