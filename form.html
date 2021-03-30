@@ -3,23 +3,28 @@
     <head>
         <meta charset="utf-8"/>
         <title>Form</title>
+        <link href="form.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <article>
             <h1>Registration</h1>
 
-            <form action="#">
+            <form name="registerForm" action="#">
                 <label for="name">Name:</label>
-                <input type="text" name="name" pattern="[A-Z][a-z]* [A-Z][a-z]*" title="last name first name" id="name"><br>
+                <input class="input" type="text" name="name" required pattern="[A-Z][a-z]* [A-Z][a-z]*" title="last name first name" id="name"><br>
                 <label for="date">Birth date:</label>
-                <input type="date" name="date" title="birth date" id="date"><br>
+                <input class="input" type="date" name="date" required title="birth date" id="date"><br>
                 <label for="email">e-mail address:</label>
-                <input type="email" name="email" title="e-mail address" id="email"><br>
+                <input class="input" type="email" name="email" required title="e-mail address" id="email" onblur="validateEmail()"><br>
                 <label for="web-adrs">Favourite website url:</label>
-                <input type="url" name="web-adrs" title="favourite website url" id="web-adrs"><br>
-                <input type="submit">
+                <input class="input" type="url" name="web-adrs" required title="favourite website url" id="web-adrs" onblur="validateUrl()"><br>
+                <input class="button" type="submit">
             </form>
         </article>
+
+        <footer></footer>
+
+        <script src="validate.js"></script>
     </body>
 </html>
