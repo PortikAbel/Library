@@ -1,5 +1,5 @@
 const r = 500;
-const angle = Math.PI / 40;
+const angle = Math.PI / 20;
 
 const colors = [
   '#404E4D',
@@ -14,19 +14,23 @@ const colors = [
   '#592941',
 ];
 const buttons = document.querySelector('#buttons');
+const hpField = document.createElement('div');
 
-let lines;
+let lines, hp;
 
 function initializeSticks() {
   lines = [];
+  hp = 3;
+  hpField.innerHTML = `health: ${hp}`;
+  document.querySelector('.controls').appendChild(hpField);
   for (let i = 0; i < 10; i++) {
     let p1 = {
       x: r * (1 - Math.sin(angle * i)),
       y: r * (1 - Math.cos(angle * i)),
     };
     let p2 = {
-      x: r * (1 - Math.sin(angle * (i + 10))),
-      y: r * (1 - Math.cos(angle * (i + 10))),
+      x: r * (1 + Math.sin(angle * (i + 10))),
+      y: r * (1 + Math.cos(angle * (i + 10))),
     }
     lines.push({
         index: i, 
@@ -40,7 +44,7 @@ function initializeSticks() {
 
 function randomize(list){
   let newList = [];
-  while(list.length > 0) {
+  while (list.length > 0) {
     const index = Math.floor(Math.random() * list.length);
     newList.push(list[index]);
     list.splice(index, 1);
@@ -52,7 +56,7 @@ function paintSticks(sticks) {
   const canvas = document.querySelector('#game-board');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.lineWidth = 5;
+  ctx.lineWidth = 15;
   sticks.filter(x => x.visible).forEach(line => {
     ctx.beginPath();
     ctx.strokeStyle = line.color;
@@ -62,10 +66,50 @@ function paintSticks(sticks) {
   }); 
 }
 
+function paintText(text, color) {
+  const canvas = document.querySelector('#game-board');
+  const ctx = canvas.getContext('2d');
+  ctx.globalAlpha = 0.8;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.globalAlpha = 1;
+  ctx.font = '50px Comic Sans MS';
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.fillText(text, canvas.width/2, canvas.height/2);
+}
+
 function btnClicked(event) {
-  let i = event.target.id;
-  lines.find(line => line.index == i).visible = false;
-  paintSticks(lines);
+  const button = event.target;
+  let i = lines.findIndex(line => line.index == button.id);
+
+  let good = true;
+  for (let j = i + 1; j < lines.length; j++) {
+    good &= !lines[j].visible;
+  }
+  
+  if (good) {
+    lines[i].visible = false;
+    paintSticks(lines);
+    button.disabled = true;
+    button.style.cursor = 'not-allowed';
+    let win = true;
+    buttons.childNodes.forEach(btn => {
+      win &= btn.disabled;
+    });
+    if (win) {
+      paintText('You won!', 'green');
+    }
+  } else {
+    hp--;
+    hpField.innerHTML = `health: ${hp}`;
+    if (hp == 0) {
+      buttons.childNodes.forEach(btn => {
+        btn.disabled = true;
+        btn.style.cursor = 'not-allowed';
+      });
+      paintText('Game Over', 'red');
+    }
+  }
 }
 
 function addButtons(sticks) {
@@ -90,6 +134,10 @@ function reload() {
   initializeSticks();
   lines = randomize(lines);
   paintSticks(lines);
+  buttons.childNodes.forEach(btn => {
+    btn.disabled = false;
+    btn.style.cursor = 'pointer';
+  });
 }
 
 window.onload = load;
