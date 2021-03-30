@@ -12,3 +12,8 @@ canvas {
     display: flex;
     flex-flow: column;
 }
+
+.colored-button {
+    width: 100px;
+    height: 50px;
+}

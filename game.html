@@ -8,13 +8,11 @@
 
     <body>
         <h1>Sticks</h1>
+        <p>Click the color button corresponding to the upper stick.</p>
         <div class="controls">
             <canvas id="game-board" width="500" height="500"></canvas>
-            <div>
-                <button>b1</button>
-                <button>b2</button>
-            </div>
-            <button onclick="load()">Restart</button>
+            <div id="buttons"></div>
+            <button onclick="reload()">Restart</button>
         </div>
 
         <script src="game.js"></script>
