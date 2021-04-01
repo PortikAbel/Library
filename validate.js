@@ -9,14 +9,12 @@ function validateEmail() {
     emailInput.validity.valid = true;
   }
   else {
-    emailInput.setCustomValidity(
-      'Expecting valid gmail/yahoo e-mail address.'
-    );
+    emailInput.setCustomValidity('Expecting valid gmail/yahoo e-mail address.');
     emailInput.validity.valid = false;
   }
 }
 
-const urlPattern = /www.[a-zA-Z0-9_\-\/.]+/
+const urlPattern = /[a-zA-Z0-9_\-\/.]+.[a-zA-Z0-9_\-\/.]+.[a-zA-Z0-9_\-\/.]+/
 
 function validateUrl() {
   const urlInput = document.forms['registerForm']['web-adrs'];
@@ -42,10 +40,7 @@ function validate() {
   submitBtn.style.cursor = submitBtn.disabled ? 'not-allowed' : 'pointer'
 }
 
-fields.forEach(field => {
-    field.addEventListener('input', validate);
-  }
-);
+fields.forEach(addEventListener('input', validate));
 
 let modifDate = "Last modified: " + document.lastModified;
 
