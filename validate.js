@@ -14,7 +14,7 @@ function validateEmail() {
   }
 }
 
-const urlPattern = /[a-zA-Z0-9_\-\/.]+\.[a-zA-Z0-9_\-\/.]+\.[a-zA-Z0-9_\-\/.]+/
+const urlPattern = /[a-zA-Z0-9_\-\/:]+\.[a-zA-Z0-9_\-\/:]+\.[a-zA-Z0-9_\-\/:]+/
 
 function validateUrl() {
   const urlInput = document.forms['registerForm']['web-adrs'];
