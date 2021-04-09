@@ -4,3 +4,8 @@ footer {
     position: fixed;
     width: 100%;
 }
+
+.error-message {
+    color: red;
+    display: none;
+}

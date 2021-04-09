@@ -1,16 +1,38 @@
-const gmailPattern = /^[a-zA-Z.!#$%&'*+\/=?^_`{|}~-]+@gmail.[a-z]+$/;
-const yahooPattern = /^[a-zA-Z.!#$%&'*+\/=?^_`{|}~-]+@yahoo.[a-z]+$/;
+const gmailPattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@gmail.[a-z]+$/;
+const yahooPattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@yahoo.[a-z]+$/;
+
+function validateName() {
+  if(document.forms['registerForm']['name'].validity.valid) {
+    document.querySelector('#name-error').style.display = 'none';
+  }
+  else {
+    document.querySelector('#name-error').style.display = 'inline';
+  }
+}
+
+function validateDate() {
+  if(document.forms.registerForm.date.validity.valid) {
+    document.querySelector('#date-error').style.display = 'none';
+  }
+  else {
+    document.querySelector('#date-error').style.display = 'inline';
+  }
+}
 
 function validateEmail() {
   const emailInput = document.forms['registerForm']['email'];
   if(emailInput.value.match(gmailPattern) || 
     emailInput.value.match(yahooPattern)) {
     emailInput.setCustomValidity('');
-    emailInput.validity.valid = true;
   }
   else {
     emailInput.setCustomValidity('Expecting valid gmail/yahoo e-mail address.');
-    emailInput.validity.valid = false;
+  }
+  if(emailInput.validity.valid) {
+    document.querySelector('#email-error').style.display = 'none';
+  }
+  else {
+    document.querySelector('#email-error').style.display = 'inline';
   }
 }
 
@@ -23,6 +45,12 @@ function validateUrl() {
   }
   else {
     urlInput.setCustomValidity('Invalid url.');
+  }
+  if(urlInput.validity.valid) {
+    document.querySelector('#url-error').style.display = 'none';
+  }
+  else {
+    document.querySelector('#url-error').style.display = 'inline';
   }
 }
 
@@ -40,7 +68,7 @@ function validate() {
   submitBtn.style.cursor = submitBtn.disabled ? 'not-allowed' : 'pointer'
 }
 
-fields.forEach(addEventListener('input', validate));
+fields.forEach(field => field.addEventListener('input', validate));
 
 let modifDate = "Last modified: " + document.lastModified;
 
