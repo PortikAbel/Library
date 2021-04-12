@@ -1,0 +1,19 @@
+canvas {
+    border: 1px solid black;
+}
+
+.controls {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+}
+
+.controls > div {
+    display: flex;
+    flex-flow: column;
+}
+
+.colored-button {
+    width: 100px;
+    height: 50px;
+}
