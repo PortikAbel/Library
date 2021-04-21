@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Online library</title>
+        <link href="style.css" rel="stylesheet" type="text/css"/>
+    </head>
+
+    <body>
+        <div>
+            <form action="/registered_books" method="POST" enctype="multipart/form-data" id="register-book">
+                <p>ISBN: <input type="text" name="isbn" required/> <span class="error-message" id="isbn-error">Incorrect input</span></p>
+                <p>Title: <input type="text" name="title"/></p>
+                <p>Author: <input type="text" name="author"/></p>
+                <p>Release date: <input type="date" name="releasedate"/></p>
+                <p>Summary: <input type="text" name="summary"/></p>
+                <p>Cover photo: <input type="file" name="cover"/></p>
+                <p>No copyes: <input type="number" min="0"/></p>
+                <p><input type="submit" value="Register"/></p>
+            </form>
+
+            <form action="/rent_book" method="POST" id="rent-book">
+                <p>User name: <input type="text" name="username"/></p>
+                <p>ISBN: <input type="text" name="isbn" required/></p>
+                <p><input type="submit" value="Rent"/></p>
+            </form>
+
+            <form action="/return_book" method="POST" id="return-book">
+                <p>User name: <input type="text" name="username"/></p>
+                <p>ISBN: <input type="text" name="isbn" required/></p>
+                <p><input type="submit" value="Return"/></p>
+            </form>
+        </div>
+    </body>
+</html>
