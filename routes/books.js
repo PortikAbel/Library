@@ -54,26 +54,23 @@ router.post('/rent', (req, res) => {
               `Book with ISBN ${req.fields.isbn} not found in our library right now.`,
             ));
           }
-          Promise.resolve(
-            dbo.collection('books')
-              .updateOne(querry, dec),
-          );
         })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((error) => req.status(400).send(error.message));
+        .catch((err) => res.status(400).send(err.message));
+
+      dbo.collection('books')
+        .updateOne(querry, dec)
+        .catch((err) => res.status(400).send(err.message));
+
+      dbo.collection('rents')
+        .insertOne(rent)
+        .then(() =>  res.end(
+          `User ${req.fields.username} rented book with isbn ${req.fields.isbn} succesfully`,
+        ))
+        .catch((err) => res.status(400).send(err.message));
+
       client.close();
     });
 });
-   /*
-        dbo.collection('rents')
-          .insertOne(rent)
-          .catch(console.log('error occured at inserting rent'));
-        res.end(
-          `User ${req.fields.username} rented book with isbn ${req.fields.isbn} succesfully`,
-        );
-      }*/
 
 router.post('/return', (req, res) => {
   const respBody = `Book return:
