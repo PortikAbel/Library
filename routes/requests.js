@@ -35,6 +35,13 @@ function getBooksAndUsers() {
 
 router.get('/', displayBooks);
 
+router.get('/book-rents', (req, res) => {
+  const query = { isbn: parseInt(req.query.isbn, 10) };
+  library.collection('rents').find(query).toArray()
+    .then((result) => res.render('book_rents', { isbn: query.isbn, rents: result }))
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+});
+
 router.get('/register', (req, res) => {
   res.render('register_form');
 });
@@ -83,7 +90,7 @@ router.post('/books/register', (req, res) => {
 });
 
 router.post('/books/rent', (req, res) => {
-  const querry = { _id: parseInt(req.fields.isbn, 10) };
+  const query = { _id: parseInt(req.fields.isbn, 10) };
   const dec = { $inc: { copies: -1 } };
   const rent = {
     renter: req.fields.username,
@@ -96,7 +103,7 @@ router.post('/books/rent', (req, res) => {
     return;
   }
 
-  library.collection('books').findOne(querry)
+  library.collection('books').findOne(query)
     .then((result) => {
       if (result === null || result.copies <= 0) {
         res.set({ 'Content-Type': 'text/plain' }).status(400).send(
@@ -105,7 +112,7 @@ router.post('/books/rent', (req, res) => {
       }
     })
     .then(() => {
-      library.collection('books').updateOne(querry, dec);
+      library.collection('books').updateOne(query, dec);
       return library.collection('users').findOne({ _id: rent.renter });
     })
     .then((result) => {
@@ -114,8 +121,29 @@ router.post('/books/rent', (req, res) => {
       }
     })
     .then(() => library.collection('rents').insertOne(rent))
-    .then(() =>  res.end(`User ${req.fields.username} rented book with isbn ${req.fields.isbn} succesfully`))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+    .then(() =>  {
+      getBooksAndUsers()
+        .then((result) => {
+          res.render('rent_form', {
+            books: result.books,
+            users: result.users,
+            success: {
+              username: req.fields.username,
+              isbn: req.fields.isbn,
+            },
+          });
+        });
+    })
+    .catch((err) => {
+      getBooksAndUsers()
+        .then((result) => {
+          res.render('rent_form', {
+            books: result.books,
+            users: result.users,
+            error: err.message,
+          });
+        });
+    });
 });
 
 router.post('/books/return', (req, res) => {
@@ -138,8 +166,29 @@ router.post('/books/return', (req, res) => {
       }
       library.collection('books').updateOne(bookQuerry, inc);
     })
-    .then(() => res.send(`User ${req.fields.username} succesfully renturned book wit ISBN ${req.fields.isbn}`))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+    .then(() => {
+      getBooksAndUsers()
+        .then((result) => {
+          res.render('return_form', {
+            books: result.books,
+            users: result.users,
+            success: {
+              username: req.fields.username,
+              isbn: req.fields.isbn,
+            },
+          });
+        });
+    })
+    .catch((err) => {
+      getBooksAndUsers()
+        .then((result) => {
+          res.render('return_form', {
+            books: result.books,
+            users: result.users,
+            error: err.message,
+          });
+        });
+    });
 });
 
 export default router;

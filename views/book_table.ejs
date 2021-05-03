@@ -17,7 +17,7 @@
                 </tr>
                 <% books.forEach((book) => { %>
                     <tr>
-                        <td><%= book._id %></td>
+                        <td><a href="/book-rents?isbn=<%= book._id %>"><%= book._id %></a></td>
                         <td><%= book.title %></td>
                         <td><%= book.author %></td>
                         <td><%= book.releasedate %></td>

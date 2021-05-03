@@ -2,6 +2,8 @@
 <html lang="en">
     <%- include('partials/head.ejs', { title: 'Book registration'}) %>
     <body>
+        <%- include('partials/navbar.ejs') %>
+
         <form action="/books/register" method="POST" enctype="multipart/form-data" id="register-book">
             <p>ISBN: <input type="text" name="isbn" required/> <span class="error-message" id="isbn-error">Incorrect input</span></p>
             <p>Title: <input type="text" name="title" required/></p>

@@ -2,6 +2,14 @@
 <html lang="en">
     <%- include('partials/head.ejs', { title: 'Return a book'}) %>
     <body>
+        <%- include('partials/navbar.ejs') %>
+
+        <% if (typeof error != 'undefined') { %>
+            <p class="red">An error occured at returning the book: <%= error %></p>
+        <% } %>
+        <% if (typeof success != 'undefined') { %>
+            <p class="green">User <%= success.username %> returned book with ISBN <%= success.isbn %> succesfully</p>
+        <% } %>
         <% if (books.length === 0) { %>
             <p>There are no books registered.</p>
         <% } else if (users.length === 0) { %>

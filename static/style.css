@@ -7,6 +7,14 @@ body {
   visibility: hidden;
 }
 
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
 #navbar > span {
   display: inline-block;
   width: 10%;
