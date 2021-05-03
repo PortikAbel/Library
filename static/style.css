@@ -1,4 +1,13 @@
+body {
+  text-align: center;
+}
+
 .error-message {
-    color: red;
-    visibility: hidden;
+  color: red;
+  visibility: hidden;
+}
+
+#navbar > span {
+  display: inline-block;
+  width: 10%;
 }

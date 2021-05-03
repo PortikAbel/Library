@@ -2,22 +2,25 @@ import express from 'express';
 import path from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import eformidable from 'express-formidable';
-import books, { connectDb } from './routes/books.js';
-
-const staticDir = path.join(process.cwd(), 'static');
-const bookDir = path.join(process.cwd(), 'books');
+import bookRequests, { connectDb } from './routes/requests.js';
 
 const app = express();
 
+// upload directory of book cover pictures
+const bookDir = path.join(process.cwd(), 'books');
 if (!existsSync(bookDir)) {
   mkdirSync(bookDir);
 }
-
-app.use(express.static(staticDir));
-
 app.use(eformidable({ bookDir }));
 
-app.use('/books', books);
+// static files
+app.use(express.static(path.join(process.cwd(), 'static')));
+app.use(express.static(path.join(process.cwd(), 'books')));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(process.cwd(), 'views'));
+
+app.use('/', bookRequests);
 connectDb();
 
-app.listen(5000);
+app.listen(5000, () => { console.log('Server listening on http://localhost:5000/ ...'); });

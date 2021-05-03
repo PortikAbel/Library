@@ -11,13 +11,52 @@ let library;
 
 const router = Router();
 
-router.post('/register', (req, res) => {
+function displayBooks(req, res) {
+  library.collection('books').find().toArray()
+    .then((result) => res.render('book_table', { books: result }))
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+}
+
+function getBooksAndUsers() {
+  let bookIDs;
+  let userNames;
+  return library.collection('books')
+    .find().project({ _id: 1 }).toArray()
+    .then((result) => {
+      bookIDs = result.map(Object.values);
+      return library.collection('users')
+        .find().project({ _id: 1 }).toArray();
+    })
+    .then((result) => {
+      userNames = result.map(Object.values);
+      return { books: bookIDs, users: userNames  };
+    });
+}
+
+router.get('/', displayBooks);
+
+router.get('/register', (req, res) => {
+  res.render('register_form');
+});
+
+router.get('/rent', (req, res) => {
+  getBooksAndUsers()
+    .then((result) => {
+      res.render('rent_form', result);
+    })
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+});
+
+router.get('/return', (req, res) => {
+  getBooksAndUsers()
+    .then((result) => {
+      res.render('return_form', result);
+    })
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+});
+
+router.post('/books/register', (req, res) => {
   const coverImgHandler = req.files.cover;
-
-  res.set({
-    'Content-Type': 'text/plain',
-  });
-
   fs.promises.rename(
     coverImgHandler.path,
     path.join(process.cwd(), 'books', coverImgHandler.name),
@@ -39,17 +78,11 @@ router.post('/register', (req, res) => {
   }).then((newBook) => {
     const books = library.collection('books');
     return books.insertOne(newBook);
-  }).then((result) => {
-    res.send(`Book registered ${JSON.stringify(result.ops)}`);
-  })
-    .catch((err) => res.status(400).send(err.message));
+  }).then(() => { displayBooks(req, res); })
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
 });
 
-router.post('/rent', (req, res) => {
-  res.set({
-    'Content-Type': 'text/plain',
-  });
-
+router.post('/books/rent', (req, res) => {
   const querry = { _id: parseInt(req.fields.isbn, 10) };
   const dec = { $inc: { copies: -1 } };
   const rent = {
@@ -66,26 +99,26 @@ router.post('/rent', (req, res) => {
   library.collection('books').findOne(querry)
     .then((result) => {
       if (result === null || result.copies <= 0) {
-        throw new Error(
+        res.set({ 'Content-Type': 'text/plain' }).status(400).send(
           `Book with ISBN ${req.fields.isbn} not found in our library right now.`,
         );
       }
     })
     .then(() => {
       library.collection('books').updateOne(querry, dec);
+      return library.collection('users').findOne({ _id: rent.renter });
+    })
+    .then((result) => {
+      if (!result) {
+        library.collection('users').insertOne({ _id: rent.renter });
+      }
     })
     .then(() => library.collection('rents').insertOne(rent))
-    .then(() =>  res.end(
-      `User ${req.fields.username} rented book with isbn ${req.fields.isbn} succesfully`,
-    ))
-    .catch((err) => res.status(400).send(err.message));
+    .then(() =>  res.end(`User ${req.fields.username} rented book with isbn ${req.fields.isbn} succesfully`))
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
 });
 
-router.post('/return', (req, res) => {
-  res.set({
-    'Content-Type': 'text/plain',
-  });
-
+router.post('/books/return', (req, res) => {
   const bookQuerry = { _id: parseInt(req.fields.isbn, 10) };
   const rentQuerry = {
     renter: req.fields.username,
@@ -106,7 +139,7 @@ router.post('/return', (req, res) => {
       library.collection('books').updateOne(bookQuerry, inc);
     })
     .then(() => res.send(`User ${req.fields.username} succesfully renturned book wit ISBN ${req.fields.isbn}`))
-    .catch((err) => res.status(400).send(err.message));
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
 });
 
 export default router;

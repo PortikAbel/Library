@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head.ejs', { title: 'Rent a book'}) %>
+    <body>
+        <% if (books.length === 0) { %>
+            <p>There are no books registered.</p>
+        <% } else if (users.length === 0) { %>
+            <p>There are no users registered.</p>
+        <% } else { %>
+            <form action="/books/rent" method="POST" id="rent-book">
+                <p>ISBN: <select id="isbn" name="isbn" required>
+                    <% books.forEach((book) => { %>
+                        <option value="<%= book[0] %>"><%= book[0]%></option>
+                    <% }); %>
+                    </select>
+                </p>
+                <p>User name: <select id="username" name="username" required>
+                    <% users.forEach((user) => { %>
+                        <option value="<%= user[0] %>"><%= user[0] %></option>
+                    <% }); %>
+                    </select>
+                </p>
+                <p><input type="submit" value="Rent"/></p>
+            </form>
+        <% } %>
+    </body>
+</html>
