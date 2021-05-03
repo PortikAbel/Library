@@ -62,6 +62,17 @@ router.get('/return', (req, res) => {
     .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
 });
 
+router.get('/sign-in', (req, res) => {
+  res.render('sign_in');
+});
+
+router.get('/sign-out', (req, res) => {
+  getBooksAndUsers()
+    .then((result) => {
+      res.render('sign_out', result);
+    });
+});
+
 router.post('/books/register', (req, res) => {
   const coverImgHandler = req.files.cover;
   fs.promises.rename(
@@ -188,6 +199,33 @@ router.post('/books/return', (req, res) => {
             error: err.message,
           });
         });
+    });
+});
+
+router.post('/users/sign-in', (req, res) => {
+  const query = { _id: req.fields.username };
+  library.collection('users').findOne(query)
+    .then((result) => {
+      if (result === null) {
+        library.collection('users').insertOne(query)
+          .then(() => res.render('sign_in', { success: { username: query._id } }));
+      } else {
+        res.render('sign_in', { error: `User ${query._id} already signed in.` });
+      }
+    })
+    .catch((err) => res.render('sign_in', { error: err.message }));
+});
+
+router.post('/users/sign-out', (req, res) => {
+  const query = { _id: req.fields.username };
+  library.collection('users').deleteOne(query)
+    .then(() => getBooksAndUsers())
+    .then((result) => {
+      res.render('sign_out', { users: result.users, success: { username: query._id } });
+    })
+    .catch((err) => {
+      getBooksAndUsers()
+        .then((result) => res.render('sign_out', { users: result.users, error: err.message }));
     });
 });
 
