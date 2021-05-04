@@ -2,7 +2,8 @@ import express from 'express';
 import path from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import eformidable from 'express-formidable';
-import bookRequests, { connectDb } from './routes/requests.js';
+import bookRequests from './routes/requests.js';
+import connectDb from './db/mongo.js';
 
 const app = express();
 
