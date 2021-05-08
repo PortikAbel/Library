@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head.ejs', { title: 'Book registration'}) %>
+    <body>
+        <%- include('partials/navbar.ejs') %>
+
+        <form action="/books/register" method="POST" enctype="multipart/form-data" id="register-book">
+            <p>ISBN: <input type="text" name="isbn" required/> <span class="error-message" id="isbn-error">Incorrect input</span></p>
+            <p>Title: <input type="text" name="title" required/></p>
+            <p>Author: <input type="text" name="author" required/></p>
+            <p>Release date: <input type="date" name="releasedate" required/></p>
+            <p>Summary: <input type="text" name="summary" required/></p>
+            <p>Cover photo: <input type="file" accept="image/*" name="cover" required/></p>
+            <p>No copyes: <input type="number" name="copies" min="0" required/></p>
+            <p><input type="submit" value="Register"/></p>
+        </form>
+    </body>
+</html>

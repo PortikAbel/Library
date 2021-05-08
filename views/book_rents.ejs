@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head.ejs', { title: 'Book rents'}) %>
+    <body>
+        <%- include('partials/navbar.ejs') %>
+
+        <% if (rents.length) { %>
+            <h1>Users who rented book with ISBN <%= isbn %>:</h1>
+            <ul>
+                <% rents.forEach((rent) => { %>
+                    <li><%= rent.renter %></li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No one rented the book with ISBN <%= isbn %>.</p>
+        <% } %>
+    </body>
+</html>
