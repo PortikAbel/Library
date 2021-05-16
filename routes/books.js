@@ -1,73 +1,11 @@
 import { Router } from 'express';
 import path from 'path';
 import fs from 'fs';
-import {
-  deleteUser,
-  findBooks, findRentsOf, findUsers, insertBook, insertUser, rentBook, returnBook,
-} from '../db/mongo.js';
+import * as db from '../db/mongo.js';
 import { registerSceme, rentScheme } from '../scemes/libraryScemes.js';
+import { displayBooks, getBooksAndUsers } from './index.js';
 
 const router = Router();
-
-function displayBooks(req, res) {
-  findBooks()
-    .then((result) => res.render('book_table', { books: result }))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
-}
-
-function getBooksAndUsers() {
-  let books;
-  let users;
-  return findBooks()
-    .then((result) => {
-      books = result;
-      return findUsers();
-    })
-    .then((result) => {
-      users = result;
-      return { books, users };
-    });
-}
-
-router.get('/', displayBooks);
-
-router.get('/book-rents', (req, res) => {
-  const isbn = parseInt(req.query.isbn, 10);
-  findRentsOf(isbn)
-    .then((result) => res.render('book_rents', { isbn, rents: result }))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
-});
-
-router.get('/register', (req, res) => {
-  res.render('register_form');
-});
-
-router.get('/rent', (req, res) => {
-  getBooksAndUsers()
-    .then((result) => {
-      res.render('rent_form', result);
-    })
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
-});
-
-router.get('/return', (req, res) => {
-  getBooksAndUsers()
-    .then((result) => {
-      res.render('return_form', result);
-    })
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
-});
-
-router.get('/sign-in', (req, res) => {
-  res.render('sign_in');
-});
-
-router.get('/sign-out', (req, res) => {
-  findUsers()
-    .then((result) => {
-      res.render('sign_out', { users: result });
-    });
-});
 
 router.post('/books/register', (req, res) => {
   const coverImgHandler = req.files.cover;
@@ -91,7 +29,7 @@ router.post('/books/register', (req, res) => {
       }
       return newBook;
     })
-    .then((newBook) => insertBook(newBook))
+    .then((newBook) => db.insertBook(newBook))
     .then(() => { displayBooks(req, res); })
     .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
 });
@@ -108,7 +46,7 @@ router.post('/books/rent', (req, res) => {
     return;
   }
 
-  rentBook(rent)
+  db.rentBook(rent)
     .then(() =>  getBooksAndUsers())
     .then((result) => {
       res.render('rent_form', {
@@ -144,7 +82,7 @@ router.post('/books/return', (req, res) => {
     return;
   }
 
-  returnBook(rent)
+  db.returnBook(rent)
     .then(() => getBooksAndUsers())
     .then((result) => {
       res.render('return_form', {
@@ -165,27 +103,6 @@ router.post('/books/return', (req, res) => {
             error: err.message,
           });
         });
-    });
-});
-
-router.post('/users/sign-in', (req, res) => {
-  const { username } = req.fields;
-  insertUser(username)
-    .then(() => res.render('sign_in', { success: { username } }))
-    .catch((err) => res.render('sign_in', { error: err.message }));
-});
-
-router.post('/users/sign-out', (req, res) => {
-  const { username } = req.fields;
-
-  deleteUser(username)
-    .then(() => findUsers())
-    .then((result) => {
-      res.render('sign_out', { users: result, success: { username } });
-    })
-    .catch((err) => {
-      findUsers()
-        .then((result) => res.render('sign_out', { users: result, error: err.message }));
     });
 });
 
