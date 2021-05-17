@@ -79,3 +79,12 @@ export function findRentsOf(isbnToFind) {
   const query = { isbn: isbnToFind };
   return library.collection('rents').find(query).toArray();
 }
+
+export function findSummary(isbn) {
+  const query = { _id: isbn };
+  const projection = {
+    _id: 0,
+    summary: 1,
+  };
+  return library.collection('books').find(query).project(projection).toArray();
+}

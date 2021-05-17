@@ -6,31 +6,38 @@
         
         <% if (books.length) { %>
             <table>
-                <tr>
-                    <th>ISBN</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Release date</th>
-                    <th>Summary</th>
-                    <th>Number of copies</th>
-                    <th>Cover</th>
-                </tr>
-                <% books.forEach((book) => { %>
+                <thead>
                     <tr>
-                        <td><a href="/book-rents?isbn=<%= book._id %>"><%= book._id %></a></td>
-                        <td><%= book.title %></td>
-                        <td><%= book.author %></td>
-                        <td><%= book.releasedate %></td>
-                        <td><%= book.summary %></td>
-                        <td><%= book.copies %></td>
-                        <td>
-                            <img src="/<%= book.imageName %>" alt="<%= book.imageName %>" height="100">
-                        </td>
+                        <th>ISBN</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Release date</th>
+                        <th>Number of copies</th>
+                        <th>Cover</th>
                     </tr>
-                <% }); %>
+                </thead>
+                <tbody>
+                    <% books.forEach((book) => { %>
+                        <tr onclick="getSummary(this)">
+                            <td><a class="id" href="/book-rents?isbn=<%= book._id %>"><%= book._id %></a></td>
+                            <td><%= book.title %></td>
+                            <td><%= book.author %></td>
+                            <td><%= book.releasedate %></td>
+                            <td><%= book.copies %></td>
+                            <td>
+                                <img src="/<%= book.imageName %>" alt="<%= book.imageName %>" height="100">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="summary" colspan="6"></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
             </table>
         <% } else { %>
             <p>No books to show</p>
         <% } %>
+
+        <script src="script.js"></script>
     </body>
 </html>

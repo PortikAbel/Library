@@ -3,9 +3,19 @@ import path from 'path';
 import fs from 'fs';
 import * as db from '../db/mongo.js';
 import { registerSceme, rentScheme } from '../scemes/libraryScemes.js';
-import { displayBooks, getBooksAndUsers } from './index.js';
 
 const router = Router();
+
+export function displayBooks(_req, res) {
+  db.findBooks()
+    .then((result) => res.render('book_table', { books: result }))
+    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+}
+
+export async function getBooksAndUsers() {
+  const [books, users] = await Promise.all([db.findBooks(), db.findUsers()]);
+  return ({ books, users });
+}
 
 router.post('/books/register', (req, res) => {
   const coverImgHandler = req.files.cover;

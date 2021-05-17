@@ -1,18 +1,12 @@
 import { Router } from 'express';
 import * as db from '../db/mongo.js';
+import bookRouter, { displayBooks, getBooksAndUsers } from './books.js';
+import userRouter from './users.js';
 
 const router = Router();
 
-export function displayBooks(_req, res) {
-  db.findBooks()
-    .then((result) => res.render('book_table', { books: result }))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
-}
-
-export async function getBooksAndUsers() {
-  const [books, users] = await Promise.all([db.findBooks(), db.findUsers()]);
-  return ({ books, users });
-}
+router.use('/books', bookRouter);
+router.use('/users', userRouter);
 
 router.get('/', displayBooks);
 

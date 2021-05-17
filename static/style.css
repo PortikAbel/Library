@@ -34,3 +34,8 @@ th {
 td {
   background-color: whitesmoke;
 }
+
+.summary {
+  text-align: left;
+  display: none;
+}
