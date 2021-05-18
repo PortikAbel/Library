@@ -88,3 +88,40 @@ export function findSummary(isbn) {
   };
   return library.collection('books').find(query).project(projection).toArray();
 }
+
+export async function getBooksAndUsers() {
+  const [books, users] = await Promise.all([findBooks(), findUsers()]);
+  return ({ books, users });
+}
+
+export async function deleteBook(isbn) {
+  const bookQuery = { _id: isbn };
+  const rentQuery = { isbn };
+  try {
+    const bookToDelete = await library.collection('books').findOne(bookQuery);
+    const [res1, res2] = await Promise.all([
+      library.collection('books').deleteOne(bookQuery),
+      library.collection('rents').deleteMany(rentQuery),
+    ]);
+    if (res1.result.ok && res2.result.ok) {
+      return {
+        success: true,
+        imageName: bookToDelete.imageName,
+      };
+    } if (!res1.result.ok) {
+      return {
+        success: false,
+        message: `could not delete book with ISBN ${isbn}`,
+      };
+    }
+    return {
+      success: false,
+      message: `could not delete rents of book with ISBN ${isbn}`,
+    };
+  } catch (err) {
+    return ({
+      success: false,
+      message: err.message,
+    });
+  }
+}

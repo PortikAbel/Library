@@ -3,7 +3,7 @@ import path from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import eformidable from 'express-formidable';
 import rootRequests from './routes/index.js';
-import apiRequests from './api/books.js';
+import bookApi from './api/books.js';
 import connectDb from './db/mongo.js';
 
 const app = express();
@@ -23,7 +23,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
 app.use('/', rootRequests);
-app.use('/', apiRequests);
+app.use('/books', bookApi);
 connectDb();
 
 app.listen(5000, () => { console.log('Server listening on http://localhost:5000/ ...'); });

@@ -3,14 +3,14 @@ import * as db from '../db/mongo.js';
 
 const router = Router();
 
-router.post('/users/sign-in', (req, res) => {
+router.post('/sign-in', (req, res) => {
   const { username } = req.fields;
   db.insertUser(username)
     .then(() => res.render('sign_in', { success: { username } }))
     .catch((err) => res.render('sign_in', { error: err.message }));
 });
 
-router.post('/users/sign-out', (req, res) => {
+router.post('/sign-out', (req, res) => {
   const { username } = req.fields;
 
   db.deleteUser(username)

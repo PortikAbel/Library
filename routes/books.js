@@ -6,18 +6,7 @@ import { registerSceme, rentScheme } from '../scemes/libraryScemes.js';
 
 const router = Router();
 
-export function displayBooks(_req, res) {
-  db.findBooks()
-    .then((result) => res.render('book_table', { books: result }))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
-}
-
-export async function getBooksAndUsers() {
-  const [books, users] = await Promise.all([db.findBooks(), db.findUsers()]);
-  return ({ books, users });
-}
-
-router.post('/books/register', (req, res) => {
+router.post('/register', (req, res) => {
   const coverImgHandler = req.files.cover;
   fs.promises.rename(
     coverImgHandler.path,
@@ -40,11 +29,11 @@ router.post('/books/register', (req, res) => {
       return newBook;
     })
     .then((newBook) => db.insertBook(newBook))
-    .then(() => { displayBooks(req, res); })
+    .then(() => { res.redirect('/'); })
     .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
 });
 
-router.post('/books/rent', (req, res) => {
+router.post('/rent', (req, res) => {
   const rent = {
     renter: req.fields.username,
     isbn: parseInt(req.fields.isbn, 10),
@@ -57,7 +46,7 @@ router.post('/books/rent', (req, res) => {
   }
 
   db.rentBook(rent)
-    .then(() =>  getBooksAndUsers())
+    .then(() => db.getBooksAndUsers())
     .then((result) => {
       res.render('rent_form', {
         books: result.books,
@@ -69,7 +58,7 @@ router.post('/books/rent', (req, res) => {
       });
     })
     .catch((err) => {
-      getBooksAndUsers()
+      db.getBooksAndUsers()
         .then((result) => {
           res.render('rent_form', {
             books: result.books,
@@ -80,7 +69,7 @@ router.post('/books/rent', (req, res) => {
     });
 });
 
-router.post('/books/return', (req, res) => {
+router.post('/return', (req, res) => {
   const rent = {
     renter: req.fields.username,
     isbn: parseInt(req.fields.isbn, 10),
@@ -93,7 +82,7 @@ router.post('/books/return', (req, res) => {
   }
 
   db.returnBook(rent)
-    .then(() => getBooksAndUsers())
+    .then(() => db.getBooksAndUsers())
     .then((result) => {
       res.render('return_form', {
         books: result.books,
@@ -105,7 +94,7 @@ router.post('/books/return', (req, res) => {
       });
     })
     .catch((err) => {
-      getBooksAndUsers()
+      db.getBooksAndUsers()
         .then((result) => {
           res.render('return_form', {
             books: result.books,
