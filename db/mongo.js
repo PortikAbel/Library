@@ -106,6 +106,7 @@ export async function deleteBook(isbn) {
     if (res1.result.ok && res2.result.ok) {
       return {
         success: true,
+        message: `book with ISBN ${isbn} succesfully deleted`,
         imageName: bookToDelete.imageName,
       };
     } if (!res1.result.ok) {

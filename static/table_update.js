@@ -21,5 +21,7 @@ function deleteRow(tableRow) {
       if (responseJSON.success) {
         tableRow.parentNode.removeChild(tableRow);
       }
+      // eslint-disable-next-line no-undef
+      openPopup(responseJSON.message);
     });
 }

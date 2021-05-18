@@ -35,6 +35,7 @@ router.delete('/:isbn', (req, res) => {
       }
     })
     .catch((err) => res.status(500).json({
+      success: false,
       message: `Error while deleting book with ISBN ${isbn}: ${err.message}`,
     }));
 });
