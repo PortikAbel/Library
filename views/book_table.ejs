@@ -3,34 +3,46 @@
     <%- include('partials/head.ejs', { title: 'Registered books'}) %>
     <body>
         <%- include('partials/navbar.ejs') %>
+        <%- include('partials/popup.ejs') %>
         
         <% if (books.length) { %>
             <table>
-                <tr>
-                    <th>ISBN</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Release date</th>
-                    <th>Summary</th>
-                    <th>Number of copies</th>
-                    <th>Cover</th>
-                </tr>
-                <% books.forEach((book) => { %>
+                <thead>
                     <tr>
-                        <td><a href="/book-rents?isbn=<%= book._id %>"><%= book._id %></a></td>
-                        <td><%= book.title %></td>
-                        <td><%= book.author %></td>
-                        <td><%= book.releasedate %></td>
-                        <td><%= book.summary %></td>
-                        <td><%= book.copies %></td>
-                        <td>
-                            <img src="/<%= book.imageName %>" alt="<%= book.imageName %>" height="100">
-                        </td>
+                        <th>ISBN</th>
+                        <th>Title (click for summary)</th>
+                        <th>Author</th>
+                        <th>Release date</th>
+                        <th>Number of copies</th>
+                        <th>Cover</th>
                     </tr>
-                <% }); %>
+                </thead>
+                <tbody>
+                    <% books.forEach((book) => { %>
+                        <tr>
+                            <td><a class="id" href="/books/<%= book._id %>/rents"><%= book._id %></a></td>
+                            <td onclick="getSummary(this.parentNode)"><%= book.title %></td>
+                            <td><%= book.author %></td>
+                            <td><%= book.releasedate %></td>
+                            <td><%= book.copies %></td>
+                            <td>
+                                <img src="/<%= book.imageName %>" alt="<%= book.imageName %>" height="100">
+                            </td>
+                            <td>
+                                <img src="delete.png" alt="delete" height="50" 
+                                onclick="deleteRow(this.parentNode.parentNode)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="summary" colspan="6"></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
             </table>
         <% } else { %>
             <p>No books to show</p>
         <% } %>
+
+        <script src="table_update.js"></script>
     </body>
 </html>
