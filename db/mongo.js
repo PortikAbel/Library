@@ -1,7 +1,6 @@
 import mongo from 'mongodb';
+import { url, options } from '../config/dbConfig.js';
 
-const url = 'mongodb://localhost:27017/';
-const options = { useNewUrlParser: true, useUnifiedTopology: true };
 const dbo = mongo.MongoClient(url, options);
 let library;
 
@@ -59,14 +58,24 @@ export function findUsers() {
   return library.collection('users').find().toArray();
 }
 
-export function insertUser(username) {
+export function findUser(username) {
   const query = { _id: username };
+  return library.collection('users').findOne(query);
+}
+
+export function insertUser(user) {
+  const query = { _id: user.username };
+  const data = {
+    _id: user.username,
+    hashWithSalt: user.hashWithSalt,
+    admin: false,
+  };
   return library.collection('users').findOne(query)
     .then((result) => {
       if (result === null) {
-        return library.collection('users').insertOne(query);
+        return library.collection('users').insertOne(data);
       }
-      throw new Error(`User ${username} already signed in.`);
+      throw new Error(`Username ${user.username} already exists.`);
     });
 }
 
@@ -75,8 +84,13 @@ export function deleteUser(username) {
   return library.collection('users').deleteOne(query);
 }
 
-export function findRentsOf(isbnToFind) {
+export function findRentsOfBook(isbnToFind) {
   const query = { isbn: isbnToFind };
+  return library.collection('rents').find(query).toArray();
+}
+
+export function findRentsOfUser(usernameToFind) {
+  const query = { renter: usernameToFind };
   return library.collection('rents').find(query).toArray();
 }
 

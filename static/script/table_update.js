@@ -1,10 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-function getSummary(tableRow) {
+async function getSummary(tableRow) {
   const isbn = tableRow.children[0].innerText;
   const summaryTD = tableRow.nextElementSibling.getElementsByTagName('td')[0];
-  fetch(`/books/${isbn}`, {
-    method: 'GET',
-  }).then((response) => response.json())
+  fetch(`/books/${isbn}/summary`)
+    .then((response) => response.json())
     .then((responseText) => {
       summaryTD.style.display = 'table-cell';
       summaryTD.innerText = responseText.summary;
@@ -12,7 +11,7 @@ function getSummary(tableRow) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function deleteRow(tableRow) {
+async function deleteRow(tableRow) {
   const isbn = tableRow.children[0].innerText;
   fetch(`/books/${isbn}`, {
     method: 'DELETE',

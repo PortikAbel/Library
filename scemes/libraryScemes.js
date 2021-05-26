@@ -34,6 +34,8 @@ export const rentScheme = Joi.object({
     .integer()
     .min(0)
     .required(),
+
+  date: Joi.date(),
 });
 
 export default { registerSceme, rentScheme };

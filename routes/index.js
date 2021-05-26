@@ -1,48 +1,62 @@
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
+import { secret } from '../config/hashConfig.js';
 import * as db from '../db/mongo.js';
-import bookRouter from './books.js';
-import userRouter from './users.js';
+import { checkHash, createHash } from '../utils/hash.js';
 
 const router = Router();
 
-router.use('/books', bookRouter);
-router.use('/users', userRouter);
-
-router.get('/', (_req, res) => {
-  db.findBooks()
-    .then((result) => res.render('book_table', { books: result }))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+router.get('/', async (req, res) => {
+  try {
+    const books = await db.findBooks();
+    const { token } = req.cookies;
+    if (token) {
+      const username = jwt.verify(token, secret);
+      const user = await db.findUser(username);
+      res.render('book_table', { books, user });
+    } else {
+      res.render('book_table', { books });
+    }
+  } catch (err) {
+    res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message);
+  }
 });
 
-router.get('/register', (_req, res) => {
-  res.render('register_form');
+router.get('/login', (_req, res) => {
+  res.render('login');
 });
 
-router.get('/rent', (_req, res) => {
-  db.getBooksAndUsers()
-    .then((result) => {
-      res.render('rent_form', result);
-    })
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+router.get('/logout', (_req, res) => {
+  res.clearCookie('token');
+  res.redirect('/');
 });
 
-router.get('/return', (_req, res) => {
-  db.getBooksAndUsers()
-    .then((result) => {
-      res.render('return_form', result);
-    })
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+router.get('/sign-up', (_req, res) => {
+  res.render('sign_up');
 });
 
-router.get('/sign-in', (_req, res) => {
-  res.render('sign_in');
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await db.findUser(username);
+    if (user && checkHash(password, user.hashWithSalt)) {
+      const token = jwt.sign(username, secret);
+      res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
+      res.redirect('/');
+    } else {
+      res.status(401).send({ message: 'invalid credentials.' });
+    }
+  } catch (err) {
+    res.render('login', { error: err.message });
+  }
 });
 
-router.get('/sign-out', (_req, res) => {
-  db.findUsers()
-    .then((result) => {
-      res.render('sign_out', { users: result });
-    });
+router.post('/sign-up', async (req, res) => {
+  const { username, password } = req.fields;
+  const hashWithSalt = await createHash(password);
+  db.insertUser({ username, hashWithSalt })
+    .then(() => res.redirect('/login'))
+    .catch((err) => res.json({ error: err }));
 });
 
 export default router;

@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import { unlinkSync } from 'fs';
 import path from 'path';
+import jwt from 'jsonwebtoken';
+import { secret } from '../config/hashConfig.js';
 import * as db from '../db/mongo.js';
+import checkAdmin from '../middleware/checkAdmin.js';
 
 const router = Router();
 
-router.get('/:isbn', (req, res) => {
+router.get('/:isbn/summary', (req, res) => {
   const { isbn } = req.params;
   db.findSummary(parseInt(isbn, 10))
     .then((summary) => (summary ? res.json(summary[0]) : res.status(404).json({
@@ -16,12 +19,20 @@ router.get('/:isbn', (req, res) => {
     }));
 });
 
-router.get('/:isbn/rents', (req, res) => {
-  const isbn = parseInt(req.params.isbn, 10);
-  db.findRentsOf(isbn)
-    .then((result) => res.render('book_rents', { isbn, rents: result }))
-    .catch((err) => res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message));
+router.get('/:isbn/rents', async (req, res) => {
+  try {
+    const isbn = parseInt(req.params.isbn, 10);
+    const rents = await db.findRentsOfBook(isbn);
+    const { token } = req.cookies;
+    const username = jwt.verify(token, secret);
+    const user = await db.findUser(username);
+    res.render('book_rents', { isbn, rents, user });
+  } catch (err) {
+    res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message);
+  }
 });
+
+router.use(checkAdmin);
 
 router.delete('/:isbn', (req, res) => {
   const isbn = parseInt(req.params.isbn, 10);
