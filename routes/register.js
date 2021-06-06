@@ -1,25 +1,21 @@
 import { Router } from 'express';
 import path from 'path';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
-import { secret } from '../config/hashConfig.js';
 import * as db from '../db/mongo.js';
 import { registerSceme } from '../scemes/libraryScemes.js';
 
 const router = Router();
 
-router.get('/register', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const username = jwt.verify(token, secret);
-    const user = await db.findUser(username);
+    const { user } = req;
     res.render('register_form', { user });
   } catch (err) {
     res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message);
   }
 });
 
-router.post('/register', (req, res) => {
+router.post('/', (req, res) => {
   const coverImgHandler = req.files.cover;
   fs.promises.rename(
     coverImgHandler.path,

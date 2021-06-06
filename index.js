@@ -8,10 +8,12 @@ import connectDb from './db/mongo.js';
 
 import bookApi from './api/books.js';
 import rootRouter from './routes/index.js';
+import authRouter from './routes/auth.js';
 import userRouter from './routes/users.js';
-import bookRouter from './routes/books.js';
+import registerRouter from './routes/register.js';
 
 import checkLogin from './middleware/checkLogin.js';
+import checkUser from './middleware/checkUser.js';
 
 const app = express();
 
@@ -32,13 +34,16 @@ app.set('views', path.join(process.cwd(), 'views'));
 app.use(cookieParser());
 app.use(express.json());
 
+app.use(checkLogin);
+
+app.use('/', authRouter);
 app.use('/', rootRouter);
 
-app.use(checkLogin);
+app.use(checkUser);
 
 app.use('/users', userRouter);
 app.use('/books', bookApi);
-app.use('/books', bookRouter);
+app.use('/register', registerRouter);
 
 connectDb();
 

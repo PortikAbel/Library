@@ -1,18 +1,17 @@
 import jwt from 'jsonwebtoken';
 import { Router } from 'express';
 import { secret } from '../config/hashConfig.js';
+import * as db from '../db/mongo.js';
 
 const router = Router();
 
-router.use((req, res, next) => {
+router.use(async (req, _res, next) => {
   const { token } = req.cookies;
   if (token) {
-    jwt.verify(token, secret);
-    next();
-  } else {
-    res.status(401);
-    res.send({ method: 'unauthorized user' });
+    const username = jwt.verify(token, secret);
+    req.user = await db.findUser(username);
   }
+  next();
 });
 
 export default router;

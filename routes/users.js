@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import jwt from 'jsonwebtoken';
-import { secret } from '../config/hashConfig.js';
 import { rentScheme } from '../scemes/libraryScemes.js';
 import * as db from '../db/mongo.js';
 
@@ -8,10 +6,8 @@ const router = Router();
 
 router.get('/rents', async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const username = jwt.verify(token, secret);
-    const user = await db.findUser(username);
-    const rents = await db.findRentsOfUser(username);
+    const { user } = req;
+    const rents = await db.findRentsOfUser(user._id);
     const allBooks = await db.findBooks();
     res.render('rents_of_user', { rents, allBooks, user });
   } catch (err) {
@@ -21,10 +17,9 @@ router.get('/rents', async (req, res) => {
 
 router.post('/rents', async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const username = jwt.verify(token, secret);
+    const { user } = req;
     const rent = {
-      renter: username,
+      renter: user._id,
       isbn: parseInt(req.body.isbn, 10),
       date: req.body.date,
     };
@@ -43,10 +38,9 @@ router.post('/rents', async (req, res) => {
 
 router.delete('/rents', async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const username = jwt.verify(token, secret);
+    const { user } = req;
     const query = {
-      renter: username,
+      renter: user._id,
       isbn: parseInt(req.body.isbn, 10),
       date: req.body.date,
     };

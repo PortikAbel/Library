@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import { unlinkSync } from 'fs';
 import path from 'path';
-import jwt from 'jsonwebtoken';
-import { secret } from '../config/hashConfig.js';
 import * as db from '../db/mongo.js';
 import checkAdmin from '../middleware/checkAdmin.js';
 
@@ -23,9 +21,7 @@ router.get('/:isbn/rents', async (req, res) => {
   try {
     const isbn = parseInt(req.params.isbn, 10);
     const rents = await db.findRentsOfBook(isbn);
-    const { token } = req.cookies;
-    const username = jwt.verify(token, secret);
-    const user = await db.findUser(username);
+    const { user } = req;
     res.render('book_rents', { isbn, rents, user });
   } catch (err) {
     res.set({ 'Content-Type': 'text/plain' }).status(400).send(err.message);
