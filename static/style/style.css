@@ -2,6 +2,10 @@ body {
   text-align: center;
 }
 
+.hidden {
+  display: none;
+}
+
 .error-message {
   color: red;
   visibility: hidden;

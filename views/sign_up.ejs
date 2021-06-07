@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head.ejs', { title: 'Sign up'}) %>
+    <body>
+        <%- include('partials/navbar.ejs', { user: locals.user }) %>
+
+        <% if (locals.error) { %>
+            <p class="red">An error occured at signing up: <%= error %></p>
+        <% } %>
+        <% if (locals.success) { %>
+            <p class="green">User <%= success.username %> Logged in succesfully</p>
+        <% } %>
+        <form action="/sign-up" method="POST" enctype="multipart/form-data" id="sign-up">
+            <p>User name: <input type="text" name="username" required/></p>
+            <p>Password: <input type="password" name="password" required/></p>
+            <p><input type="submit" value="Sign up"/></p>
+        </form>
+    </body>
+</html>

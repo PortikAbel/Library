@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head.ejs', { title: 'My rents'}) %>
+    <body>
+        <%- include('partials/navbar.ejs', { user: locals.user }) %>
+        <%- include('partials/popup.ejs') %>
+
+        <h1>Rent a new book</h1>
+        <form>
+            <p>ISBN: <select id="isbn-select" name="isbn" required>
+                <% allBooks.forEach((book) => { %>
+                    <option value="<%= book._id %>"><%= book._id %></option>
+                <% }); %>
+                </select>
+                <span id="rent-error" class="red"></span>
+            </p>
+            <p><input type="button" value="Rent" onclick="rentBook()"/></p>
+        </form>
+
+        <h1>Rented books</h1>
+        <p id="no-books-p" class="<%= (rents.length === 0) ? '' : 'hidden' %>">
+            There are no books rented.
+        </p>
+        <table id="rent-table" class="<%= (rents.length === 0) ? 'hidden' : '' %>">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% rents.forEach((rent) => { %>
+                    <tr>
+                        <td><%= rent.isbn %></td>
+                        <td><%= rent.date %></td>
+                        <td>
+                            <img src="/resources/return.png" alt="return" height="50"
+                            onclick="returnBook(this.parentNode.parentNode)"/>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        
+        <script src="/script/rents.js"></script>
+    </body>
+</html>

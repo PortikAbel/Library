@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head.ejs', { title: 'Login'}) %>
+    <body>
+        <%- include('partials/navbar.ejs', { user: locals.user }) %>
+
+        <form>
+            <p>User name: <input type="text" id="username" required/></p>
+            <p>Password: <input type="password" id="password" required/></p>
+            <p><input type="button" value="Login" onclick="login()"/></p>
+        </form>
+        <p id="login-error" class="red"></p>
+    </body>
+        
+    <script src="/script/login.js"></script>
+</html>

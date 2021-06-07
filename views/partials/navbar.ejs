@@ -1,8 +1,14 @@
 <div id="navbar">
     <span><a href="/">Home</a></span>
-    <span><a href="/register">Register new book</a></span>
-    <span><a href="/rent">Rent a book</a></span>
-    <span><a href="/return">Return a book</a></span>
-    <span><a href="/sign-in">Sign in</a></span>
-    <span><a href="/sign-out">Sign out</a></span>
+    <% if (user) { %>
+        <% if (user.admin) { %>
+            <span><a href="/books/register">Register new book</a></span>
+        <% } %>
+        <span><a href="/users/rents">My rents</a></span>
+        <span><%= user._id %></span>
+        <span><a href="/logout">Logout</a></span>
+    <% } else { %>
+        <span><a href="/login">Login</a></span>
+        <span><a href="/sign-up">Sign up</a></span>
+    <% } %>
 </div>

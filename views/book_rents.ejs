@@ -2,7 +2,7 @@
 <html lang="en">
     <%- include('partials/head.ejs', { title: 'Book rents'}) %>
     <body>
-        <%- include('partials/navbar.ejs') %>
+        <%- include('partials/navbar.ejs', { user: locals.user }) %>
 
         <% if (rents.length) { %>
             <h1>Users who rented book with ISBN <%= isbn %>:</h1>
