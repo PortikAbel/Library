@@ -19,7 +19,7 @@ body {
   color: green;
 }
 
-#navbar > span {
+nav > span {
   display: inline-block;
   width: 10%;
   margin: 10px;
@@ -37,9 +37,4 @@ th {
 
 td {
   background-color: whitesmoke;
-}
-
-.summary {
-  text-align: left;
-  display: none;
 }

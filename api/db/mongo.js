@@ -55,12 +55,19 @@ export function returnBook(rent) {
 }
 
 export function findUsers() {
-  return library.collection('users').find().toArray();
+  const projection = { admin: 1 };
+  return library.collection('users').find().project(projection).toArray();
 }
 
 export function findUser(username) {
   const query = { _id: username };
-  return library.collection('users').findOne(query);
+  const projection = { admin: 1 };
+  return library.collection('users').findOne(query, projection);
+}
+
+export function findHashOfUser(query) {
+  const projection = { _id: 0, hashWithSalt: 1 };
+  return library.collection('users').findOne(query, projection);
 }
 
 export function insertUser(user) {
