@@ -61,21 +61,15 @@ export function findUsers() {
 
 export function findUser(username) {
   const query = { _id: username };
-  const projection = { admin: 1 };
-  return library.collection('users').findOne(query, projection);
-}
-
-export function findHashOfUser(query) {
-  const projection = { _id: 0, hashWithSalt: 1 };
-  return library.collection('users').findOne(query, projection);
+  return library.collection('users').findOne(query);
 }
 
 export function insertUser(user) {
   const query = { _id: user.username };
   const data = {
-    _id: user.username,
+    _id: user._id,
     hashWithSalt: user.hashWithSalt,
-    admin: false,
+    admin: user.admin ? user.admin : false,
   };
   return library.collection('users').findOne(query)
     .then((result) => {

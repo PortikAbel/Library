@@ -10,6 +10,19 @@ router.get('/', (req, res) => {
   res.json(req.user);
 });
 
+router.post('/', async (req, res) => {
+  const { username, password } = req.body;
+  const _id = username;
+  try {
+    const hashWithSalt = await createHash(password);
+    await db.insertUser({ _id, hashWithSalt });
+    const user = await db.findUser(username);
+    res.json(user);
+  } catch (err) {
+    res.json({ error: err });
+  }
+});
+
 router.post('/logout', (_req, res) => {
   res.clearCookie('token');
   res.send({ message: 'logged out' });
@@ -19,8 +32,7 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await db.findUser(username);
-    const hash = await db.findHashOfUser(user);
-    if (user && checkHash(password, hash)) {
+    if (user && checkHash(password, user.hashWithSalt)) {
       const token = jwt.sign(username, secret);
       res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
       res.json(user);
@@ -28,19 +40,7 @@ router.post('/login', async (req, res) => {
       res.status(401).send({ message: 'invalid credentials.' });
     }
   } catch (err) {
-    res.render('login', { error: err.message });
-  }
-});
-
-router.post('/sign-up', async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const hashWithSalt = await createHash(password);
-    await db.insertUser({ username, hashWithSalt });
-    const user = await db.findUser(username);
-    res.json(user);
-  } catch (err) {
-    res.json({ error: err });
+    res.status(500).json(err);
   }
 });
 

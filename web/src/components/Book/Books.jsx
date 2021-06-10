@@ -3,7 +3,7 @@ import autoBind from 'auto-bind';
 import { deleteBook, findAllBooks } from '../../service/book.js';
 import Book from './Book';
 import { Field, Formik } from 'formik';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Table, Form, Row, Col } from 'react-bootstrap';
 
 export default class Books extends React.Component {
   constructor(props) {
@@ -61,7 +61,6 @@ export default class Books extends React.Component {
   }
 
   changeFilters(values) {
-    console.log(values);
     let filters = {...this.state.filters};
     for (const filterKey in values) {
       filters[filterKey] = values[filterKey]
@@ -95,35 +94,45 @@ export default class Books extends React.Component {
         {({ handleSubmit }) => {
             return (
               <form onSubmit={handleSubmit}>
-                <table>
+                <Table striped bordered responsive>
                   <thead>
                     <tr>
                       <th onClick={() => this.sortBy('_id')}>
-                        ISBN<br/>
+                        <Form.Group as={Row}>
+                          <Col>ISBN</Col>
+                        </Form.Group>
                         <Field type="text" name="_id"/>
                       </th>
                       <th onClick={() => this.sortBy('title')}>
-                        Title<br/>
+                        <Form.Group as={Row}>
+                          <Col>Title</Col>
+                        </Form.Group>
                         <Field type="text" name="title"/><br/>
                         (click for summary)
                       </th>
                       <th onClick={() => this.sortBy('author')}>
-                        Author<br/>
+                        <Form.Group as={Row}>
+                          <Col>Author</Col>
+                        </Form.Group>
                         <Field type="text" name="author"/>
                       </th>
                       <th onClick={() => this.sortBy('releasedate')}>
-                        Release date<br/>
+                        <Form.Group as={Row}>
+                          <Col>Release date</Col>
+                        </Form.Group>
                         <Form.Group as={Row}>
                           <Form.Label column sm={3}>from:&nbsp;</Form.Label>
-                          <Col sm={1}><Field type="date" name="dateFrom"/></Col>
+                          <Col sm={9}><Field type="date" name="dateFrom"/></Col>
                         </Form.Group>
                         <Form.Group as={Row}>
                           <Form.Label column sm={3}>to:&nbsp;</Form.Label>
-                          <Col sm={1}><Field type="date" name="dateTo"/></Col>
+                          <Col sm={9}><Field type="date" name="dateTo"/></Col>
                         </Form.Group>
                       </th>
                       <th onClick={() => this.sortBy('copies')}>
-                        Number of copies<br/>
+                        <Form.Group as={Row}>
+                          <Col>Number of copies</Col>
+                        </Form.Group>
                         <Form.Group as={Row}>
                           <Form.Label column sm={2}>min:&nbsp;</Form.Label>
                           <Col sm={1}><Field type="number" name="minCopies"/></Col>
@@ -133,9 +142,16 @@ export default class Books extends React.Component {
                           <Col sm={1}><Field type="number" name="maxCopies"/></Col>
                         </Form.Group>
                       </th>
-                      <th>Cover</th>
                       <th>
-                        <button type="submit" className="btn btn-primary">Search</button>
+                        <Form.Group as={Row}>
+                          <Col>Cover</Col>
+                        </Form.Group></th>
+                      <th>
+                        <Form.Group as={Row}>
+                          <Col>
+                          <button type="submit" className="btn btn-primary">Search</button>
+                          </Col>
+                        </Form.Group>
                       </th>
                     </tr>
                   </thead>
@@ -153,7 +169,7 @@ export default class Books extends React.Component {
                       ))}
                     </tbody>
                   }
-                </table>
+                </Table>
               </form>
           )}}
       </Formik>

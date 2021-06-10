@@ -1,4 +1,5 @@
 import React from 'react';
+import autoBind from 'auto-bind';
 import { Formik, Field, Form } from 'formik';
 import { signup } from '../../service/auth';
 import { Button } from 'react-bootstrap';
@@ -7,6 +8,7 @@ export default class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = { err: null };
+    autoBind(this);
   }
 
   async signup(values) {
@@ -36,7 +38,7 @@ export default class SignUp extends React.Component {
             <br/>
 
             <label htmlFor="password">Password: </label>{' '}
-            <input type="password" id="password" name="password" placeholder="password" required/>
+            <Field type="password" id="password" name="password" placeholder="password" required/>
             <br/>
 
             <Button variant="primary" type="submit">Sign Up</Button>

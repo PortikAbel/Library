@@ -10,6 +10,7 @@ import connectDb from './db/mongo.js';
 
 import imageRouter from './routes/images.js';
 import bookGeneralApi from './routes/booksGeneral.js';
+import usernameRouter from './routes/username.js';
 import rentApi from './routes/rents.js';
 import authRouter from './routes/auth.js';
 import bookAdminApi from './routes/booksAdmin.js';
@@ -54,6 +55,7 @@ app.use('/auth', authRouter);
 // users
 app.use(checkUser);
 
+app.use('/username', usernameRouter);
 app.use('/rents', rentApi);
 
 // admins

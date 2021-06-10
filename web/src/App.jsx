@@ -11,6 +11,7 @@ import UserRents from './components/Rent/UserRents';
 import Users from './components/User/Users';
 import History from './components/Rent/History';
 import SignUp from './components/User/SignUp';
+import Profile from './components/User/Profile';
 
 import { getUser } from './service/auth';
 
@@ -53,6 +54,7 @@ export default class App extends React.Component {
             <Route exact path="/sign-up" component={(params) => <SignUp handleLogin={this.handleLogin} {...params}/>} />
             <Route exact path="/login" component={(params) => <Login handleLogin={this.handleLogin} {...params}/>} />
             <Route exact path="/users" component={(params) => <Users {...params}/>} />
+            <Route exact path="/profile" component={(params) => <Profile handleLogin={this.handleLogin} {...params}/>} />
           </Switch>
         </main>
       </BrowserRouter>

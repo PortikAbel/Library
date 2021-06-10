@@ -33,17 +33,20 @@ export default class Login extends React.Component {
           }}
           onSubmit={async (values) => { await this.login(values); }}
         >
-          <Form>
-            <label htmlFor="username">User name:</label>{' '}
-            <Field type="text" id="username" name="username" placeholder="user name" required/>
-            <br/>
+          {({ handleSubmit }) => {
+            return (
+              <Form onSubmit={handleSubmit}>
+                <label htmlFor="username">User name:</label>{' '}
+                <Field type="text" id="username" name="username" placeholder="user name" required/>
+                <br/>
 
-            <label htmlFor="password">Password:</label>{' '}
-            <input type="password" id="password" name="password" placeholder="password" required/>
-            <br/>
+                <label htmlFor="password">Password:</label>{' '}
+                <input type="password" id="password" name="password" placeholder="password" required/>
+                <br/>
 
-            <Button variant="primary" type="submit">Login</Button>
-          </Form>
+                <Button variant="primary" type="submit">Login</Button>
+              </Form>
+            )}}
         </Formik>
         { error && <p className="red">{error}</p> }
       </>

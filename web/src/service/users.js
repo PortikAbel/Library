@@ -24,3 +24,17 @@ export async function updateUser(user, valuesToUpdate) {
   const newUser = await response.json();
   return newUser;
 }
+
+export async function changeUsername(values) {
+  const response = await fetch(`${apiServerUrl}/username`, {
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    method: 'PUT',
+    body: JSON.stringify(values),
+  });
+  if (!response.ok) {
+    throw response.statusText;
+  }
+  const newUser = await response.json();
+  return newUser;
+}

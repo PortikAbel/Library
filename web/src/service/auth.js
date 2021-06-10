@@ -12,7 +12,7 @@ export async function getUser() {
 }
 
 export async function signup(formdata) {
-  const response = await fetch(`${apiServerUrl}/auth/sign-up`, {
+  const response = await fetch(`${apiServerUrl}/auth`, {
     headers: {
       'Content-Type': 'application/json',
     },
