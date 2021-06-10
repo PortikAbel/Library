@@ -1,42 +1,21 @@
 import React from 'react';
 import autoBind from 'auto-bind';
-import * as Yup from 'yup';
 import { Formik, Field } from 'formik';
-// import { registerBook } from '../../service/book';
+import { registerBook } from '../../service/book';
 import { Form, Row, Col } from 'react-bootstrap';
+import RegisterScheme from '../../schemes/RegisterScheme';
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = { err: null };
     autoBind(this);
-      
-    this.RegisterSchema = Yup.object().shape({
-      isbn: Yup.string()
-        .matches(/[0-9]+/,'Must be a number')
-        .min(13, 'Too Short!')
-        .max(13, 'Too Long!')
-        .required('Required'),
-      title: Yup.string()
-        .min(2, 'Too Short!')
-        .max(30, 'Too Long!')
-        .required('Required'),
-      author: Yup.string()
-        .min(2, 'Too Short!')
-        .max(30, 'Too Long!')
-        .required('Required'),
-      summary: Yup.string()
-        .max(100, 'Too long!'),
-      copies: Yup.number()
-        .integer('Must be integer')
-        .positive('Must be positive'),
-    });
   }
 
   async register(values) {
     try {
       console.log(values);
-      // await registerBook(values);
+      await registerBook(values);
       this.props.history.push('/');
     } catch (err) {
       this.setState({ err });
@@ -58,7 +37,7 @@ export default class Login extends React.Component {
             copies: 0,
             cover: '',
           }}
-          validationSchema={this.RegisterSchema}
+          validationSchema={RegisterScheme}
           onSubmit={async (values) => { await this.register(values); }}
         >
           {({ handleSubmit, setFieldValue, errors }) => {

@@ -2,8 +2,9 @@ import React from 'react';
 import autoBind from 'auto-bind';
 import { Formik, Field } from 'formik';
 import { Form, Row, Col } from 'react-bootstrap';
-import { signup } from '../../service/auth';
 import { Button } from 'react-bootstrap';
+import { signup } from '../../service/auth';
+import CredentialsScheme from '../../schemes/CredentialsScheme';
 
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -31,19 +32,22 @@ export default class SignUp extends React.Component {
             _id: '',
             password: '',
           }}
+          validationSchema={CredentialsScheme}
           onSubmit={async (values) => { await this.signup(values); }}
         >
-          {({ handleSubmit }) => {
+          {({ handleSubmit, errors }) => {
             return (
               <Form onSubmit={handleSubmit}>
               <Form.Group as={Row}>
                   <Col sm={2}><Form.Label>User&nbsp;name: </Form.Label></Col>
                   <Col><Field type="text" name="_id" placeholder="username" /></Col>
+                  { errors._id && <Col className='red'>{ errors._id }</Col>}
                 </Form.Group>
 
                 <Form.Group as={Row}>
                   <Col sm={2}><Form.Label>Password: </Form.Label></Col>
                   <Col><Field type="password" name="password" placeholder="password" /></Col>
+                  { errors.password && <Col className='red'>{ errors.password }</Col>}
                 </Form.Group>
                 
                 <Button variant="primary" type="submit">Sign Up</Button>
