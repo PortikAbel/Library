@@ -11,12 +11,13 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { username, password } = req.body;
-  const _id = username;
+  const { _id, password } = req.body;
   try {
     const hashWithSalt = await createHash(password);
     await db.insertUser({ _id, hashWithSalt });
-    const user = await db.findUser(username);
+    const user = await db.findUser(_id);
+    const token = jwt.sign(_id, secret);
+    res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
     res.json(user);
   } catch (err) {
     res.json({ error: err });
@@ -29,11 +30,11 @@ router.post('/logout', (_req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { _id, password } = req.body;
   try {
-    const user = await db.findUser(username);
+    const user = await db.findUser(_id);
     if (user && checkHash(password, user.hashWithSalt)) {
-      const token = jwt.sign(username, secret);
+      const token = jwt.sign(_id, secret);
       res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
       res.json(user);
     } else {

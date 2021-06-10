@@ -29,7 +29,10 @@ export default class Book extends React.Component {
           ? <td><Link to={`/books/${book._id}/rents`} className="id">{book._id}</Link></td>
           : <td>{book._id}</td>
           }
-          <td onClick={this.clickSummary}>{book.title}</td>
+          <td onClick={this.clickSummary}>
+            {book.title}<br/>
+            (click&nbsp;for&nbsp;summary)
+          </td>
           <td>{book.author}</td>
           <td>{book.releasedate}</td>
           <td>{book.copies}</td>

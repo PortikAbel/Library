@@ -1,6 +1,7 @@
 import React from 'react';
 import autoBind from 'auto-bind';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Field } from 'formik';
+import { Form, Row, Col } from 'react-bootstrap';
 import { signup } from '../../service/auth';
 import { Button } from 'react-bootstrap';
 
@@ -27,22 +28,27 @@ export default class SignUp extends React.Component {
         <h1>Sign Up</h1>
         <Formik
           initialValues={{
-            username: '',
+            _id: '',
             password: '',
           }}
           onSubmit={async (values) => { await this.signup(values); }}
         >
-          <Form>
-            <label htmlFor="username">User name: </label>{' '}
-            <Field type="text" id="username" name="username" placeholder="user name" required/>
-            <br/>
+          {({ handleSubmit }) => {
+            return (
+              <Form onSubmit={handleSubmit}>
+              <Form.Group as={Row}>
+                  <Col sm={2}><Form.Label>User&nbsp;name: </Form.Label></Col>
+                  <Col><Field type="text" name="_id" placeholder="username" /></Col>
+                </Form.Group>
 
-            <label htmlFor="password">Password: </label>{' '}
-            <Field type="password" id="password" name="password" placeholder="password" required/>
-            <br/>
-
-            <Button variant="primary" type="submit">Sign Up</Button>
-          </Form>
+                <Form.Group as={Row}>
+                  <Col sm={2}><Form.Label>Password: </Form.Label></Col>
+                  <Col><Field type="password" name="password" placeholder="password" /></Col>
+                </Form.Group>
+                
+                <Button variant="primary" type="submit">Sign Up</Button>
+              </Form>
+          )}}
         </Formik>
         { error && <p className="red">{error}</p> }
       </>

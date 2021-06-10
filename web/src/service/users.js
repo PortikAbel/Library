@@ -12,7 +12,7 @@ export async function getAllUsers() {
 }
 
 export async function updateUser(user, valuesToUpdate) {
-  const response = await fetch(`${apiServerUrl}/users`, {
+  const response = await fetch(`${apiServerUrl}/users/admin`, {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     method: 'PUT',
@@ -26,7 +26,21 @@ export async function updateUser(user, valuesToUpdate) {
 }
 
 export async function changeUsername(values) {
-  const response = await fetch(`${apiServerUrl}/username`, {
+  const response = await fetch(`${apiServerUrl}/users/username`, {
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    method: 'PUT',
+    body: JSON.stringify(values),
+  });
+  if (!response.ok) {
+    throw response.statusText;
+  }
+  const newUser = await response.json();
+  return newUser;
+}
+
+export async function changePassword(values) {
+  const response = await fetch(`${apiServerUrl}/users/password`, {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     method: 'PUT',

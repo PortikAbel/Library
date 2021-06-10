@@ -54,9 +54,10 @@ export async function returnBook(rent, returnDate) {
   await library.collection('books').updateOne(bookQuerry, incCopies);
 }
 
-export function findUsers() {
+export function findUsers(username) {
+  const filter = { _id: { $ne: username } };
   const projection = { admin: 1 };
-  return library.collection('users').find().project(projection).toArray();
+  return library.collection('users').find(filter).project(projection).toArray();
 }
 
 export function findUser(username) {
@@ -111,6 +112,12 @@ export function findHistoryOfUser(usernameToFind) {
   return library.collection('rents').find(query).toArray();
 }
 
+export async function updateRenter(oldUsername, newUsername) {
+  const query = { renter: oldUsername };
+  const update = { $set: { renter: newUsername } };
+  await library.collection('rents').updateMany(query, update);
+}
+
 export function findSummary(isbn) {
   const query = { _id: isbn };
   const projection = {
@@ -118,11 +125,6 @@ export function findSummary(isbn) {
     summary: 1,
   };
   return library.collection('books').find(query).project(projection).toArray();
-}
-
-export async function getBooksAndUsers() {
-  const [books, users] = await Promise.all([findBooks(), findUsers()]);
-  return ({ books, users });
 }
 
 export async function deleteBook(isbn) {

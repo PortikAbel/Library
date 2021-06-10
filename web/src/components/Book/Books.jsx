@@ -107,8 +107,7 @@ export default class Books extends React.Component {
                         <Form.Group as={Row}>
                           <Col>Title</Col>
                         </Form.Group>
-                        <Field type="text" name="title"/><br/>
-                        (click for summary)
+                        <Field type="text" name="title"/>
                       </th>
                       <th onClick={() => this.sortBy('author')}>
                         <Form.Group as={Row}>
