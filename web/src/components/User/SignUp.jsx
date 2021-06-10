@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Field, Form } from 'formik';
-import { signup } from '../service/auth';
+import { signup } from '../../service/auth';
 import { Button } from 'react-bootstrap';
 
 export default class SignUp extends React.Component {

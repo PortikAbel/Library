@@ -26,7 +26,8 @@ export default class NavBar extends React.Component {
         { user
           ? <>
             {user.admin && <Button variant="link"><Link to="/books/register">Register new book</Link></Button>}
-            <Button variant="link"><Link to="/users/rents">My rents</Link></Button>
+            <Button variant="link"><Link to="/rents/active">My rents</Link></Button>
+            <Button variant="link"><Link to="/rents/history">History</Link></Button>
             <Badge variant="info">{user._id}</Badge>
             <Button variant="link" onClick={this.onLogout}>Logout</Button>
           </>

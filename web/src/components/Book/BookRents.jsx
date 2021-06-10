@@ -1,5 +1,5 @@
 import React from 'react';
-import { getRentsOfBook } from '../service/book';
+import { getRentsOfBook } from '../../service/rent';
 
 export default class BookRents extends React.Component {
   constructor(props) {
@@ -27,7 +27,9 @@ export default class BookRents extends React.Component {
       <>
         <h1>Users who rented book with ISBN { isbn }:</h1>
         <ul>
-          { rents.map((rent) => (<li key={rent.renter}>{ rent.renter }</li>)) }
+          { rents.map((rent) => (
+            <li key={`${rent.renter}:${rent.rentDate}`}>{ rent.renter }</li>
+          ))}
         </ul>
       </>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { apiServerUrl, getSummary } from '../service/book.js';
+import { apiServerUrl, getSummary } from '../../service/book.js';
 
 export default class Book extends React.Component {
   constructor(props) {

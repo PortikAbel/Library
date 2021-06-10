@@ -2,13 +2,15 @@ import React from 'react';
 import autoBind from 'auto-bind';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Books from './components/Books';
-import RegisterBook from './components/RegisterBook';
-import Login from './components/Login';
+import Books from './components/Book/Books';
+import RegisterBook from './components/Book/RegisterBook';
+import Login from './components/User/Login';
 import NavBar from './components/NavBar';
-import BookRents from './components/BookRents';
-import UserRents from './components/UserRents';
-import SignUp from './components/SignUp';
+import BookRents from './components/Book/BookRents';
+import UserRents from './components/Rent/UserRents';
+import History from './components/Rent/History';
+import SignUp from './components/User/SignUp';
+
 import { getUser } from './service/auth';
 
 export default class App extends React.Component {
@@ -45,7 +47,8 @@ export default class App extends React.Component {
             <Route exact path="/" component={(params) => <Books user={user} {...params}/>} />
             <Route exact path="/books/register" component={(params) => <RegisterBook {...params}/>} />
             <Route exact path="/books/:isbn/rents" component={BookRents} />
-            <Route exact path="/users/rents" component={UserRents} />
+            <Route exact path="/rents/active" component={UserRents} />
+            <Route exact path="/rents/history" component={History} />
             <Route exact path="/sign-up" component={(params) => <SignUp handleLogin={this.handleLogin} {...params}/>} />
             <Route exact path="/login" component={(params) => <Login handleLogin={this.handleLogin} {...params}/>} />
           </Switch>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { deleteBook, findAllBooks } from '../service/book.js';
+import autoBind from 'auto-bind';
+import { deleteBook, findAllBooks } from '../../service/book.js';
 import Book from './Book';
 
 export default class Books extends React.Component {
@@ -8,6 +9,7 @@ export default class Books extends React.Component {
     this.state = {
       books: [],
     };
+    autoBind(this);
   }
 
   async componentDidMount() {
@@ -48,7 +50,7 @@ export default class Books extends React.Component {
               key={book._id}
               book={book}
               user={user}
-              deleteBook={this.deleteBook.bind(this)}
+              deleteBook={this.deleteBook}
               index={i}
             />
           ))}

@@ -18,27 +18,6 @@ export async function getSummary(isbn) {
   return summary;
 }
 
-async function getRents(url) {
-  const response = await fetch(url, {
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw response.statusText;
-  }
-  const rents = await response.json();
-  return rents;
-}
-
-export async function getRentsOfBook(isbn) {
-  const rents = await getRents(`${apiServerUrl}/books/${isbn}/rents`);
-  return rents;
-}
-
-export async function getRentsOfUser() {
-  const rents = await getRents(`${apiServerUrl}/users/rents`);
-  return rents;
-}
-
 export async function registerBook(formdata) {
   // sending the image
   const fileFormData = new FormData();

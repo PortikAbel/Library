@@ -41,17 +41,17 @@ export function rentBook(rent) {
     .then(() => library.collection('rents').insertOne(rent));
 }
 
-export function returnBook(rent) {
+export async function returnBook(rent, returnDate) {
   const bookQuerry = { _id: rent.isbn };
-  const inc = { $inc: { copies: 1 } };
+  const updateRent = { $set: { returnDate } };
+  const incCopies = { $inc: { copies: 1 } };
 
-  return library.collection('rents').deleteOne(rent)
-    .then((result) => {
-      if (result.deletedCount < 1) {
-        throw new Error(`User ${rent.renter} has not rented book wit ISBN ${rent.isbn}`);
-      }
-      library.collection('books').updateOne(bookQuerry, inc);
-    });
+  const result = library.collection('rents').findOne(rent);
+  if (!result) {
+    throw new Error(`You have not rented book wit ISBN ${rent.isbn}`);
+  }
+  await library.collection('rents').updateOne(rent, updateRent);
+  await library.collection('books').updateOne(bookQuerry, incCopies);
 }
 
 export function findUsers() {
@@ -97,7 +97,18 @@ export function findRentsOfBook(isbnToFind) {
 }
 
 export function findRentsOfUser(usernameToFind) {
-  const query = { renter: usernameToFind };
+  const query = {
+    renter: usernameToFind,
+    returnDate: { $eq: null },
+  };
+  return library.collection('rents').find(query).toArray();
+}
+
+export function findHistoryOfUser(usernameToFind) {
+  const query = {
+    renter: usernameToFind,
+    returnDate: { $ne: null },
+  };
   return library.collection('rents').find(query).toArray();
 }
 

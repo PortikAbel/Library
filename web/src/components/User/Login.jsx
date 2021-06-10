@@ -1,7 +1,7 @@
 import React from 'react';
 import autoBind from 'auto-bind';
 import { Formik, Field, Form } from 'formik';
-import { login } from '../service/auth';
+import { login } from '../../service/auth';
 import { Button } from 'react-bootstrap';
 
 export default class Login extends React.Component {
