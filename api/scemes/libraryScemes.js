@@ -3,7 +3,8 @@ import Joi from 'joi';
 export const registerSceme = Joi.object({
   _id: Joi.number()
     .integer()
-    .min(0)
+    .min(1000000000000)
+    .max(9999999999999)
     .required(),
 
   title: Joi.string()
