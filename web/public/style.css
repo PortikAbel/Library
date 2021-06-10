@@ -1,16 +1,3 @@
-body {
-  text-align: center;
-}
-
-.hidden {
-  display: none;
-}
-
-.error-message {
-  color: red;
-  visibility: hidden;
-}
-
 .red {
   color: red;
 }
@@ -19,20 +6,13 @@ body {
   color: green;
 }
 
-nav > span {
-  display: inline-block;
-  width: 10%;
-  margin: 10px;
-}
-
 table, th, td {
   border: 2px solid black;
   padding: 5px;
-  background-color: turquoise;
 }
 
 th {
-  background-color: gray;
+  background-color: turquoise;
 }
 
 td {

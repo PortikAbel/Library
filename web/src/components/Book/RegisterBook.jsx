@@ -2,6 +2,7 @@ import React from 'react';
 import autoBind from 'auto-bind';
 import { Formik, Field } from 'formik';
 import { registerBook } from '../../service/book';
+import { Form, Row, Col } from 'react-bootstrap';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -40,36 +41,43 @@ export default class Login extends React.Component {
           {({ handleSubmit, setFieldValue }) => {
             return (
               <form onSubmit={handleSubmit}>
-                <label htmlFor="isbn">ISBN:</label>{' '}
-                <Field type="text" name="isbn" placeholder="isbn" required/>
-                <br/>
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="isbn">ISBN:</Form.Label>
+                  <Col><Field type="text" name="isbn" placeholder="isbn" required/></Col>
+                </Form.Group>
 
-                <label htmlFor="title">Title:</label>{' '}
-                <Field type="text" name="title" placeholder="title" required/>
-                <br/>
-                
-                <label htmlFor="author">Author:</label>{' '}
-                <Field type="text" name="author" placeholder="author" required/>
-                <br/>
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="title">Title:</Form.Label>
+                  <Col><Field type="text" name="title" placeholder="title" required/></Col>
+                </Form.Group>
+                  
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="author">Author:</Form.Label>
+                  <Col><Field type="text" name="author" placeholder="author" required/></Col>
+                </Form.Group>
 
-                <label htmlFor="releasedate">Release date:</label>{' '}
-                <Field type="date" name="releasedate" required/>
-                <br/>
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="releasedate">Release date:</Form.Label>
+                  <Col><Field type="date" name="releasedate" required/></Col>
+                </Form.Group>
 
-                <label htmlFor="summary">Summary:</label>{' '}
-                <Field type="text" name="summary" placeholder="summary" required/>
-                <br/>
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="summary">Summary:</Form.Label>
+                  <Col><Field type="text" name="summary" placeholder="summary" required/></Col>
+                </Form.Group>
 
-                <label htmlFor="copies">No copyes:</label>{' '}
-                <Field type="number" name="copies" required/>
-                <br/>
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="copies">No copyes:</Form.Label>
+                  <Col><Field type="number" name="copies" required/></Col>
+                </Form.Group>
 
-                <label htmlFor="cover">Cover photo</label>{' '}
-                <input name="cover" type="file" required onChange={(event) =>
-                    setFieldValue('cover', event.currentTarget.files[0])
-                  }
-                />
-                <br/>
+                <Form.Group as={Row}>
+                  <Form.Label column sm={2} htmlFor="cover">Cover photo</Form.Label>
+                  <Col><input name="cover" type="file" required onChange={(event) =>
+                      setFieldValue('cover', event.currentTarget.files[0])
+                    }
+                  /></Col>
+                </Form.Group>
                 
                 <button type="submit" className="btn btn-primary">Register</button>
               </form>
