@@ -42,7 +42,7 @@ export default class Book extends React.Component {
           </td>
           { user && user.admin &&
               <td>
-                <img src="/resources/delete.png" alt="delete" height="50"
+                <img src="/resources/delete.png" alt="delete" className="icon"
                 onClick={() => deleteBook(index)}/>
               </td>
           }

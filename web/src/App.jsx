@@ -8,6 +8,7 @@ import Login from './components/User/Login';
 import NavBar from './components/NavBar';
 import BookRents from './components/Book/BookRents';
 import UserRents from './components/Rent/UserRents';
+import Users from './components/User/Users';
 import History from './components/Rent/History';
 import SignUp from './components/User/SignUp';
 
@@ -51,6 +52,7 @@ export default class App extends React.Component {
             <Route exact path="/rents/history" component={History} />
             <Route exact path="/sign-up" component={(params) => <SignUp handleLogin={this.handleLogin} {...params}/>} />
             <Route exact path="/login" component={(params) => <Login handleLogin={this.handleLogin} {...params}/>} />
+            <Route exact path="/users" component={(params) => <Users {...params}/>} />
           </Switch>
         </main>
       </BrowserRouter>

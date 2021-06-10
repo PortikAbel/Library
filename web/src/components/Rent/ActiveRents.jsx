@@ -23,7 +23,7 @@ export default function ActiveRents(props) {
                 <td>{rent.rentDate.slice(0, 10)}</td>
                 <td>{rent.rentDate.slice(11, 19)}</td>
                 <td>
-                  <img src="/resources/return.png" alt="return" height="50"
+                  <img src="/resources/return.png" alt="return" className="icon"
                   onClick={() => returnBook(rent)}/>
                 </td>
               </tr>

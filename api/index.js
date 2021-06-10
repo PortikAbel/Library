@@ -13,6 +13,7 @@ import bookGeneralApi from './routes/booksGeneral.js';
 import rentApi from './routes/rents.js';
 import authRouter from './routes/auth.js';
 import bookAdminApi from './routes/booksAdmin.js';
+import userRouter from './routes/users.js';
 
 import checkLogin from './middleware/checkLogin.js';
 import checkUser from './middleware/checkUser.js';
@@ -59,6 +60,7 @@ app.use('/rents', rentApi);
 app.use(checkAdmin);
 
 app.use('/books', bookAdminApi);
+app.use('/users', userRouter);
 
 connectDb();
 

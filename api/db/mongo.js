@@ -86,6 +86,11 @@ export function insertUser(user) {
     });
 }
 
+export async function updateUser(user, toUpdate) {
+  const update = { $set: toUpdate };
+  await library.collection('users').updateOne(user, update);
+}
+
 export function deleteUser(username) {
   const query = { _id: username };
   return library.collection('users').deleteOne(query);
