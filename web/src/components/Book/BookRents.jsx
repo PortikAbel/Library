@@ -6,17 +6,26 @@ export default class BookRents extends React.Component {
     super(props);
     this.state = {
       rents: [],
+      err: null,
     };
   }
 
   async componentDidMount() {
-    const rents = await getRentsOfBook(this.props.match.params.isbn);
-    this.setState({ rents });
+    try {
+      const rents = await getRentsOfBook(this.props.match.params.isbn);
+      this.setState({ rents });
+    } catch (err) {
+      this.setState({ err });
+    }
   }
 
   render() {
-    const { rents } = this.state;
+    const { rents, err } = this.state;
     const { isbn } = this.props.match.params;
+
+    if (err) {
+      return (<div className='red'>{err}</div>);
+    }
 
     if (rents.length === 0) {
       return (

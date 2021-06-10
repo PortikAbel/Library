@@ -15,13 +15,31 @@ export default class Users extends React.Component {
         showAdmin: true,
         showUser: true,
       },
+      err: null,
     }
     autoBind(this);
   }
 
   async componentDidMount() {
-    const users = await getAllUsers();
-    this.setState({ users });
+    try {
+      const users = await getAllUsers();
+      this.setState({ users });
+    } catch (err) {
+      this.setState({ err });
+    }
+  }
+
+  async changeAdmin(user) {
+    try {
+      const updateAdmin = { admin: !user.admin };
+      let users = [...this.state.users];
+      const userIndex = users.findIndex(userInArray => userInArray === user);
+      const newUser = await updateUser(user, updateAdmin);
+      users[userIndex] = newUser;
+      this.setState({ users });
+    } catch (err) {
+      this.setState({ err });
+    }
   }
 
   changeFilters(values) {
@@ -32,15 +50,6 @@ export default class Users extends React.Component {
         : null;
     }
     this.setState({ filters })
-  }
-
-  async changeAdmin(user) {
-    const updateAdmin = { admin: !user.admin };
-    let users = [...this.state.users];
-    const userIndex = users.findIndex(userInArray => userInArray === user);
-    const newUser = await updateUser(user, updateAdmin);
-    users[userIndex] = newUser;
-    this.setState({ users });
   }
 
   getFilteredUsers() {
@@ -65,6 +74,7 @@ export default class Users extends React.Component {
   }
 
   render() {
+    const { err } = this.state;
     const users = this.getFilteredUsers();
 
     const searchForm = (
@@ -118,7 +128,10 @@ export default class Users extends React.Component {
 
     return (
       <>
+        <h1>Filter users</h1>
         {searchForm}
+        { err && <div className='red'>{err}</div>}
+        <h1>Registered users</h1>
         {usersTable}
       </>
     );

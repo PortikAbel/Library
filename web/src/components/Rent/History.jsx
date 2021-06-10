@@ -7,6 +7,7 @@ export default class ActiveRents extends React.Component {
     super(props);
     this.state = {
       rents: [],
+      err: null,
     }
   }
 
@@ -20,11 +21,12 @@ export default class ActiveRents extends React.Component {
   }
 
   render() {
-    const { rents } = this.state;
+    const { rents, err } = this.state;
 
     return (
       <>
         <h1>Returned books</h1>
+        { err && <div className='red'>{err}</div> }
         {
           rents.length === 0
             ? <p>There are no books returned.</p>

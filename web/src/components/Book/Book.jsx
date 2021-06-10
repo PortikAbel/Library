@@ -5,22 +5,36 @@ import { apiServerUrl, getSummary } from '../../service/book.js';
 export default class Book extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showSummary: false };
+    this.state = {
+      showSummary: false,
+      err: null,
+    };
 
     this.clickSummary = this.clickSummary.bind(this);
   }
 
   async clickSummary() {
-    const { showSummary } = this.state;
-    if (!showSummary) {
-      const summary = await getSummary(this.props.book._id);
-      this.setState({ summary });
+    try {
+      const { showSummary } = this.state;
+      if (!showSummary) {
+        const summary = await getSummary(this.props.book._id);
+        this.setState({ summary });
+      }
+      this.setState({ showSummary: !showSummary });
+    } catch (err) {
+      this.setState({ err });
     }
-    this.setState({ showSummary: !showSummary });
   }
   
   render() {
     const { book, user, deleteBook, index } = this.props;
+    const { showSummary, summary, err } = this.state;
+
+    if (err) {
+      return (
+        <div className="red">{err}</div>
+      );
+    }
 
     return (
       <>
@@ -50,9 +64,9 @@ export default class Book extends React.Component {
               </td>
           }
         </tr>
-        { this.state.showSummary &&
+        { showSummary &&
           <tr>
-            <td className="summary" colSpan="6">{this.state.summary}</td>
+            <td className="summary" colSpan="6">{summary}</td>
           </tr>
         }
       </>

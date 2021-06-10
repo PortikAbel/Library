@@ -11,20 +11,29 @@ export default class Books extends React.Component {
     this.state = {
       books: [],
       filters: {},
+      err: null,
     };
     autoBind(this);
   }
 
   async componentDidMount() {
-    const books = await findAllBooks();
-    this.setState({ books });
+    try {
+      const books = await findAllBooks();
+      this.setState({ books });
+    } catch (err) {
+      this.setState({ err });
+    }
   }
 
   async deleteBook(index) {
-    let books = [...this.state.books];
-    await deleteBook(books[index]._id)
-    books.splice(index, 1);
-    this.setState({ books });
+    try {
+      let books = [...this.state.books];
+      await deleteBook(books[index]._id)
+      books.splice(index, 1);
+      this.setState({ books });
+    } catch (err) {
+      this.setState({ err });
+    }
   }
 
   compare(a, b) {
@@ -72,7 +81,7 @@ export default class Books extends React.Component {
 
   render() {
     let { books } = this.state;
-    const { filters } = this.state;
+    const { filters, err } = this.state;
     const { user } = this.props;
 
     for (const filterKey in filters) {
@@ -94,6 +103,7 @@ export default class Books extends React.Component {
         {({ handleSubmit }) => {
             return (
               <form onSubmit={handleSubmit}>
+                { err && <div className="red">{err}</div> }
                 <Table striped bordered responsive>
                   <thead>
                     <tr>

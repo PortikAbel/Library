@@ -23,7 +23,7 @@ export default class Login extends React.Component {
   }
 
   render() {
-    const { error } = this.state;
+    const { err } = this.state;
     return (
       <>
         <h1>Login</h1>
@@ -51,7 +51,7 @@ export default class Login extends React.Component {
               </Form>
             )}}
         </Formik>
-        { error && <p className="red">{error}</p> }
+        { err && <p className="red">{err}</p> }
       </>
     )
   }
