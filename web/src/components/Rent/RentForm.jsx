@@ -18,17 +18,20 @@ export default function RentForm(props) {
           }}
           onSubmit={async (values) => { await rent(values) }}
         >
-          <Form>
-            <Form.Group as={Row}>
-              <Col sm={1}><Form.Label htmlFor="isbn">ISBN:</Form.Label></Col>
-              <Field as="select" name="isbn" required>
-                { allBooks.map((book) => (
-                  <option key={book._id} value={book._id}>{book._id}</option>
-                ))}
-              </Field>
-            </Form.Group>
-            <Col><Button variant="primary" type="submit">Rent</Button></Col>
-          </Form>
+          {({ handleSubmit }) => {
+            return (
+              <Form onSubmit={handleSubmit}>
+                <Form.Group as={Row}>
+                  <Col sm={1}><Form.Label htmlFor="isbn">ISBN:</Form.Label></Col>
+                  <Field as="select" name="isbn" required>
+                    { allBooks.map((book) => (
+                      <option key={book._id} value={book._id}>{book._id}</option>
+                    ))}
+                  </Field>
+                </Form.Group>
+                <Col><Button variant="primary" type="submit">Rent</Button></Col>
+              </Form>
+            )}}
         </Formik>
       </>);
 }
