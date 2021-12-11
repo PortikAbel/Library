@@ -2,6 +2,7 @@ version: '3'
 services:
   api:
     build: api/
+    image: portik22/library_api
     ports:
       - "5000:5000"
     links:
@@ -14,5 +15,6 @@ services:
       
   web:
     build: web/
+    image: portik22/library_web
     ports:
       - "3000:3000"
