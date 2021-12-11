@@ -66,4 +66,6 @@ app.use('/users', userRouter);
 
 connectDb();
 
-app.listen(5000, () => { console.log('Server listening on http://localhost:5000/ ...'); });
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => { console.log(`Server listening on http://localhost:${port}/ ...`); });
