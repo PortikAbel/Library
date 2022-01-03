@@ -1,0 +1,38 @@
+{
+  "name": "lab-paim1949-web",
+  "version": "1.0.0",
+  "description": "Web",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "author": "Portik Ábel",
+  "license": "ISC",
+  "dependencies": {
+    "auto-bind": "^4.0.0",
+    "bootstrap": "^4.6.0",
+    "formik": "^2.2.9",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.6.1",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "eslint": "^7.28.0",
+    "eslint-plugin-react": "^7.24.0",
+    "react-scripts": "^4.0.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

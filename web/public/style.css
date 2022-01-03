@@ -1,0 +1,27 @@
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.icon {
+  height: 50px;
+}
+
+th {
+  background-color: turquoise;
+}
+
+td {
+  background-color: whitesmoke;
+}
+
+main {
+  margin-top: 2%;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 1%;
+  background-color:aquamarine;
+}

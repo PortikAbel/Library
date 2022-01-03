@@ -1,0 +1,20 @@
+version: '3'
+services:
+  api:
+    build: api/
+    image: portik22/library_api
+    ports:
+      - "5000:5000"
+    links:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+      
+  web:
+    build: web/
+    image: portik22/library_web
+    ports:
+      - "3000:3000"
